@@ -10,7 +10,7 @@ def get_data_loader(training = True):
     """
     TODO: implement this function.
 
-    INPUT: 
+    INPUT:
         An optional boolean argument (default value is True for training dataset)
 
     RETURNS:
@@ -20,6 +20,11 @@ def get_data_loader(training = True):
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
+
+    dataset = datasets.FashionMNIST('./data', train=training, download=True, transform=transform)
+    loader = torch.utils.data.DataLoader(dataset, batch_size=64, shuffle=(training==True))
+
+    return loader
 
 
 
