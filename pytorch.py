@@ -54,12 +54,25 @@ def build_deeper_model():
     """
     TODO: implement this function.
 
-    INPUT: 
+    INPUT:
         None
 
     RETURNS:
         An untrained neural network model
     """
+    model = nn.Sequential(
+        nn.Flatten(),
+        nn.Linear(784, 256),
+        nn.ReLU(),
+        nn.Linear(256, 128),
+        nn.ReLU(),
+        nn.Linear(128, 64),
+        nn.ReLU(),
+        nn.Linear(64, 32),
+        nn.ReLU(),
+        nn.Linear(32, 10)
+    )
+    return model
 
 
 
