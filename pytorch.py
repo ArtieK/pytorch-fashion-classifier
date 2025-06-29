@@ -80,15 +80,39 @@ def train_model(model, train_loader, criterion, T):
     """
     TODO: implement this function.
 
-    INPUT: 
+    INPUT:
         model - the model produced by the previous function
         train_loader  - the train DataLoader produced by the first function
-        criterion   - cross-entropy 
+        criterion   - cross-entropy
         T - number of epochs for training
 
     RETURNS:
         None
     """
+    model.train()
+    opt = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+    for epoch in range(T):
+        correct = 0
+        total = 0
+        running_loss = 0.0
+
+        for images, labels in train_loader:
+            opt.zero_grad()
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            opt.step()
+
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            running_loss += loss.item() * labels.size(0)
+
+        accuracy = 100.0 * correct / total
+        avg_loss = running_loss / total
+
+        print(f"Train Epoch: {epoch} Accuracy: {correct}/{total}({accuracy:.2f}%) Loss: {avg_loss:.3f}")
     
 
 
