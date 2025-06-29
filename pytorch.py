@@ -120,14 +120,35 @@ def evaluate_model(model, test_loader, criterion, show_loss = True):
     """
     TODO: implement this function.
 
-    INPUT: 
+    INPUT:
         model - the the trained model produced by the previous function
         test_loader    - the test DataLoader
-        criterion   - cropy-entropy 
+        criterion   - cropy-entropy
 
     RETURNS:
         None
     """
+    model.eval()
+    correct = 0
+    total = 0
+    running_loss = 0.0
+
+    with torch.no_grad():
+        for images, labels in test_loader:
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            running_loss += loss.item() * labels.size(0)
+
+    accuracy = 100.0 * correct / total
+    avg_loss = running_loss / total
+
+    if show_loss:
+        print(f"Average loss: {avg_loss:.4f}")
+    print(f"Accuracy: {accuracy:.2f}%")
     
 
 
