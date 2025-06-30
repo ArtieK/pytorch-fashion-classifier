@@ -183,7 +183,39 @@ def predict_label(model, test_images, index):
 
 if __name__ == '__main__':
     '''
-    Feel free to write your own test code here to exaime the correctness of your functions. 
+    Feel free to write your own test code here to exaime the correctness of your functions.
     Note that this part will not be graded.
     '''
     criterion = nn.CrossEntropyLoss()
+
+    print("Testing get_data_loader()...")
+    train_loader = get_data_loader()
+    print(f"Train loader type: {type(train_loader)}")
+    print(f"Train dataset size: {len(train_loader.dataset)}")
+
+    test_loader = get_data_loader(False)
+    print(f"Test dataset size: {len(test_loader.dataset)}\n")
+
+    print("Testing build_model()...")
+    model = build_model()
+    print(model)
+    print()
+
+    print("Testing train_model() with 5 epochs...")
+    train_model(model, train_loader, criterion, 5)
+    print()
+
+    print("Testing evaluate_model() with show_loss=True...")
+    evaluate_model(model, test_loader, criterion, show_loss=True)
+    print()
+
+    print("Testing evaluate_model() with show_loss=False...")
+    evaluate_model(model, test_loader, criterion, show_loss=False)
+    print()
+
+    print("Testing predict_label()...")
+    test_images = next(iter(test_loader))[0]
+    predict_label(model, test_images, 1)
+    print()
+
+    print("All tests completed!")
