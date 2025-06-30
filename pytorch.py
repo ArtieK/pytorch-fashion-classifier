@@ -156,7 +156,7 @@ def predict_label(model, test_images, index):
     """
     TODO: implement this function.
 
-    INPUT: 
+    INPUT:
         model - the trained model
         test_images   -  a tensor. test image set of shape Nx1x28x28
         index   -  specific index  i of the image to be tested: 0 <= i <= N - 1
@@ -165,6 +165,20 @@ def predict_label(model, test_images, index):
     RETURNS:
         None
     """
+    class_names = ['T-shirt/top','Trouser','Pullover','Dress','Coat','Sandal','Shirt','Sneaker','Bag','Ankle Boot']
+
+    model.eval()
+
+    with torch.no_grad():
+        logits = model(test_images[index:index+1])
+        prob = F.softmax(logits, dim=1)
+
+    top_probs, top_indices = torch.topk(prob, 3)
+
+    for i in range(3):
+        class_idx = top_indices[0][i].item()
+        probability = top_probs[0][i].item() * 100
+        print(f"{class_names[class_idx]}: {probability:.2f}%")
 
 
 if __name__ == '__main__':
